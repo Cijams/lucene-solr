@@ -26,6 +26,8 @@ import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hdfs.MiniDFSCluster;
+import org.apache.lucene.util.QuickPatchThreadsFilter;
+import org.apache.solr.SolrIgnoredThreadsFilter;
 import org.apache.solr.SolrTestCaseJ4;
 import org.apache.solr.util.BadHdfsThreadsFilter;
 import org.apache.solr.util.FSHDFSUtils;
@@ -38,7 +40,16 @@ import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakFilters;
 
+
+//nocommit. Here.s the addition to SolrIgnoredThreadsFilter
+// if (threadName.startsWith("Log4j2-TF-2-AsyncLoggerConfig")) {
+//     return true;
+//     }
+
+
 @ThreadLeakFilters(defaultFilters = true, filters = {
+    SolrIgnoredThreadsFilter.class,
+    QuickPatchThreadsFilter.class,
     BadHdfsThreadsFilter.class // hdfs currently leaks thread(s)
 })
 public class HdfsRecoverLeaseTest extends SolrTestCaseJ4 {

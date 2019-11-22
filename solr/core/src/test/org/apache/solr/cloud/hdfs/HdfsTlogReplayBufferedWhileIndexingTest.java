@@ -17,7 +17,9 @@
 package org.apache.solr.cloud.hdfs;
 
 import org.apache.hadoop.hdfs.MiniDFSCluster;
+import org.apache.lucene.util.QuickPatchThreadsFilter;
 import org.apache.lucene.util.LuceneTestCase.Slow;
+import org.apache.solr.SolrIgnoredThreadsFilter;
 import org.apache.solr.cloud.TlogReplayBufferedWhileIndexingTest;
 import org.apache.solr.util.BadHdfsThreadsFilter;
 import org.junit.AfterClass;
@@ -28,7 +30,16 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakFilters;
 
 @Slow
 @Nightly
+
+//nocommit. Here.s the addition to SolrIgnoredThreadsFilter
+// if (threadName.startsWith("Log4j2-TF-2-AsyncLoggerConfig")) {
+//     return true;
+//     }
+
+
 @ThreadLeakFilters(defaultFilters = true, filters = {
+    SolrIgnoredThreadsFilter.class,
+    QuickPatchThreadsFilter.class,
     BadHdfsThreadsFilter.class // hdfs currently leaks thread(s)
 })
 public class HdfsTlogReplayBufferedWhileIndexingTest extends TlogReplayBufferedWhileIndexingTest {

@@ -19,7 +19,10 @@ package org.apache.solr.cloud.hdfs;
 import java.io.IOException;
 
 import org.apache.hadoop.hdfs.MiniDFSCluster;
+import org.apache.lucene.util.LuceneTestCase;
+import org.apache.lucene.util.QuickPatchThreadsFilter;
 import org.apache.lucene.util.LuceneTestCase.Slow;
+import org.apache.solr.SolrIgnoredThreadsFilter;
 import org.apache.solr.cloud.BasicDistributedZkTest;
 import org.apache.solr.util.BadHdfsThreadsFilter;
 import org.junit.AfterClass;
@@ -28,8 +31,17 @@ import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakFilters;
 
+
+//nocommit. Here.s the addition to SolrIgnoredThreadsFilter
+// if (threadName.startsWith("Log4j2-TF-2-AsyncLoggerConfig")) {
+//     return true;
+//     }
+
+
 @Slow
 @ThreadLeakFilters(defaultFilters = true, filters = {
+    SolrIgnoredThreadsFilter.class,
+    QuickPatchThreadsFilter.class,
     BadHdfsThreadsFilter.class // hdfs currently leaks thread(s)
 })
 public class HdfsNNFailoverTest extends BasicDistributedZkTest {

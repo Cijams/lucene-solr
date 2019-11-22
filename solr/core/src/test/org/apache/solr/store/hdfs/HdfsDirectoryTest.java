@@ -29,6 +29,8 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IOContext;
 import org.apache.lucene.store.IndexInput;
 import org.apache.lucene.store.IndexOutput;
+import org.apache.lucene.util.QuickPatchThreadsFilter;
+import org.apache.solr.SolrIgnoredThreadsFilter;
 import org.apache.solr.SolrTestCaseJ4;
 import org.apache.solr.cloud.hdfs.HdfsTestUtil;
 import org.apache.solr.util.BadHdfsThreadsFilter;
@@ -40,7 +42,15 @@ import org.junit.Test;
 
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakFilters;
 
+//nocommit. Here.s the addition to SolrIgnoredThreadsFilter
+// if (threadName.startsWith("Log4j2-TF-2-AsyncLoggerConfig")) {
+//     return true;
+//     }
+
+
 @ThreadLeakFilters(defaultFilters = true, filters = {
+    SolrIgnoredThreadsFilter.class,
+    QuickPatchThreadsFilter.class,
     BadHdfsThreadsFilter.class // hdfs currently leaks thread(s)
 })
 public class HdfsDirectoryTest extends SolrTestCaseJ4 {
