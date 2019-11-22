@@ -25,6 +25,8 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakLingering;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.lucene.util.LuceneTestCase;
+import org.apache.lucene.util.QuickPatchThreadsFilter;
+import org.apache.solr.SolrIgnoredThreadsFilter;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.request.CollectionAdminRequest;
@@ -38,7 +40,16 @@ import org.slf4j.LoggerFactory;
 /**
  * Test 5 nodes Solr cluster with Kerberos plugin enabled.
  */
+
+//nocommit. Here.s the addition to SolrIgnoredThreadsFilter
+// if (threadName.startsWith("Log4j2-TF-2-AsyncLoggerConfig")) {
+//     return true;
+//     }
+
+
 @ThreadLeakFilters(defaultFilters = true, filters = {
+    SolrIgnoredThreadsFilter.class,
+    QuickPatchThreadsFilter.class,
     BadZookeeperThreadsFilter.class // Zookeeper login leaks TGT renewal threads
 })
 
