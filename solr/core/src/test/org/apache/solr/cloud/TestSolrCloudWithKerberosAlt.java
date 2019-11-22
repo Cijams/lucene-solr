@@ -41,18 +41,11 @@ import org.slf4j.LoggerFactory;
  * Test 5 nodes Solr cluster with Kerberos plugin enabled.
  */
 
-//nocommit. Here.s the addition to SolrIgnoredThreadsFilter
-// if (threadName.startsWith("Log4j2-TF-2-AsyncLoggerConfig")) {
-//     return true;
-//     }
-
-
 @ThreadLeakFilters(defaultFilters = true, filters = {
     SolrIgnoredThreadsFilter.class,
     QuickPatchThreadsFilter.class,
     BadZookeeperThreadsFilter.class // Zookeeper login leaks TGT renewal threads
 })
-
 @LuceneTestCase.Slow
 @ThreadLeakLingering(linger = 10000) // minikdc has some lingering threads
 public class TestSolrCloudWithKerberosAlt extends SolrCloudTestCase {

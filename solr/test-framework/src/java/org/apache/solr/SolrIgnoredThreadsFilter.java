@@ -59,7 +59,6 @@ public class SolrIgnoredThreadsFilter implements ThreadFilter {
     if (threadName.startsWith("Image Fetcher")) {
       return true;
     }
-    //nocommit. SolrIgnoredTHreadsFilter has been added to a lot of tests, is this OK?
     if (threadName.startsWith("Log4j2-TF-2-AsyncLoggerConfig")) {
       return true;
     }

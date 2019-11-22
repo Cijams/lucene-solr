@@ -32,18 +32,11 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakFilters;
 
 @Slow
 @Nightly
-
-//nocommit. Here.s the addition to SolrIgnoredThreadsFilter
-// if (threadName.startsWith("Log4j2-TF-2-AsyncLoggerConfig")) {
-//     return true;
-//     }
 @ThreadLeakFilters(defaultFilters = true, filters = {
     SolrIgnoredThreadsFilter.class,
     QuickPatchThreadsFilter.class,
     BadHdfsThreadsFilter.class // hdfs currently leaks thread(s)
 })
-// commented 20-July-2018  @LuceneTestCase.BadApple(bugUrl="https://issues.apache.org/jira/browse/SOLR-12028") // 26-Mar-2018
-// commented out on: 24-Dec-2018 @LuceneTestCase.BadApple(bugUrl="https://issues.apache.org/jira/browse/SOLR-12028") // added 17-Aug-2018
 public class HdfsBasicDistributedZk2Test extends BasicDistributedZk2Test {
   private static MiniDFSCluster dfsCluster;
   

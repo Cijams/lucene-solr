@@ -64,12 +64,6 @@ import static org.apache.solr.core.backup.BackupManager.ZK_STATE_DIR;
  * This class implements the tests for HDFS integration for Solr backup/restore capability.
  */
 
-//nocommit. Here.s the addition to SolrIgnoredThreadsFilter
-// if (threadName.startsWith("Log4j2-TF-2-AsyncLoggerConfig")) {
-//     return true;
-//     }
-
-
 @ThreadLeakFilters(defaultFilters = true, filters = {
     SolrIgnoredThreadsFilter.class,
     QuickPatchThreadsFilter.class,

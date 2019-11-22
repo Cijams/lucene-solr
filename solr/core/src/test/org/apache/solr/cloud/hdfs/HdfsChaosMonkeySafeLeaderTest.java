@@ -32,13 +32,6 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakFilters;
 
 @Slow
 @Nightly
-
-//nocommit. Here.s the addition to SolrIgnoredThreadsFilter
-// if (threadName.startsWith("Log4j2-TF-2-AsyncLoggerConfig")) {
-//     return true;
-//     }
-
-
 @ThreadLeakFilters(defaultFilters = true, filters = {
     SolrIgnoredThreadsFilter.class,
     QuickPatchThreadsFilter.class,

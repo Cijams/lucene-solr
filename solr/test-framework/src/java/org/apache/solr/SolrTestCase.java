@@ -42,12 +42,6 @@ import com.carrotsearch.randomizedtesting.annotations.ThreadLeakFilters;
  * SolrTestCaseJ4.
  */
 
-//nocommit. Here.s the addition to SolrIgnoredThreadsFilter
-// if (threadName.startsWith("Log4j2-TF-2-AsyncLoggerConfig")) {
-//     return true;
-//     }
-
-
 @ThreadLeakFilters(defaultFilters = true, filters = { SolrIgnoredThreadsFilter.class })
 public class SolrTestCase extends LuceneTestCase {
 
