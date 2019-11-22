@@ -60,7 +60,8 @@ CharacterEntities = ( "AElig" | "Aacute" | "Acirc" | "Agrave" | "Alpha"
                     | "times" | "trade" | "uArr" | "uacute" | "uarr" | "ucirc"
                     | "ugrave" | "uml" | "upsih" | "upsilon" | "uuml"
                     | "weierp" | "xi" | "yacute" | "yen" | "yuml" | "zeta"
-                    | "zwj" | "zwnj" )
+('                    | "zwj" | "zwnj"', ')')
+/* nocommit The parens have been added */
 %{
   private static final Map<String,String> upperCaseVariantsAccepted
       = new HashMap<>();

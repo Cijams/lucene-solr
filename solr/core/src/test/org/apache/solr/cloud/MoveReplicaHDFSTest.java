@@ -22,7 +22,9 @@ import com.carrotsearch.randomizedtesting.annotations.TimeoutSuite;
 import org.apache.hadoop.hdfs.MiniDFSCluster;
 import org.apache.lucene.util.LuceneTestCase.AwaitsFix;
 import org.apache.lucene.util.LuceneTestCase.Slow;
+import org.apache.lucene.util.QuickPatchThreadsFilter;
 import org.apache.lucene.util.TimeUnits;
+import org.apache.solr.SolrIgnoredThreadsFilter;
 import org.apache.solr.cloud.hdfs.HdfsTestUtil;
 import org.apache.solr.util.BadHdfsThreadsFilter;
 import org.junit.AfterClass;
@@ -31,7 +33,16 @@ import org.junit.Test;
 
 @Slow
 @Nightly
+
+//nocommit. Here.s the addition to SolrIgnoredThreadsFilter
+// if (threadName.startsWith("Log4j2-TF-2-AsyncLoggerConfig")) {
+//     return true;
+//     }
+
+
 @ThreadLeakFilters(defaultFilters = true, filters = {
+    SolrIgnoredThreadsFilter.class,
+    QuickPatchThreadsFilter.class,
     BadHdfsThreadsFilter.class // hdfs currently leaks thread(s)
 })
 @TimeoutSuite(millis = TimeUnits.HOUR)
