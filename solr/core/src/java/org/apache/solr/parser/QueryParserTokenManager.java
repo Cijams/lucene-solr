@@ -2,12 +2,10 @@
 package org.apache.solr.parser;
 
 /** Token Manager. */
-@SuppressWarnings("cast")
 public class QueryParserTokenManager implements QueryParserConstants
 {
   int commentNestingDepth ;
 
-  
 private final int jjStopStringLiteralDfa_3(int pos, long active0)
 {
    switch (pos)
@@ -1400,8 +1398,8 @@ static final long[] jjtoSkip = {
 protected CharStream input_stream;
 private final int[] jjrounds = new int[63];
 private final int[] jjstateSet = new int[126];
-private final StringBuilder jjimage = new StringBuilder();
-private StringBuilder image = jjimage;
+private final StringBuffer jjimage = new StringBuffer();
+private StringBuffer image = jjimage;
 private int jjimageLen;
 private int lengthOfMatch;
 protected char curChar;

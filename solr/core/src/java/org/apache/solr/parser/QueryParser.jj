@@ -74,7 +74,6 @@ public class QueryParser extends SolrQueryParserBase {
     return disallowedPostMultiTerm.contains(tokenKind) == false;
   }
 
-  /* nocommit SynonymQueryStyle added to method */
   @Override
   protected Query newFieldQuery(Analyzer analyzer, String field, String queryText,
                                 boolean quoted, boolean fieldAutoGenPhraseQueries, boolean fieldEnableGraphQueries, SynonymQueryStyle synonymQueryStyle)
