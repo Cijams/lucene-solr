@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.carrotsearch.randomizedtesting.RandomizedTest.systemPropertyAsBoolean;
+import com.carrotsearch.randomizedtesting.annotations.ThreadLeakFilters;
 
 /**
  * All Solr test cases should derive from this class eventually. This is originally a result of async logging, see:
@@ -41,6 +42,13 @@ import static com.carrotsearch.randomizedtesting.RandomizedTest.systemPropertyAs
  * SolrTestCaseJ4.
  */
 
+//nocommit. Here.s the addition to SolrIgnoredThreadsFilter
+// if (threadName.startsWith("Log4j2-TF-2-AsyncLoggerConfig")) {
+//     return true;
+//     }
+
+
+@ThreadLeakFilters(defaultFilters = true, filters = { SolrIgnoredThreadsFilter.class })
 public class SolrTestCase extends LuceneTestCase {
 
   private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
