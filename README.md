@@ -37,7 +37,7 @@ comprehensive documentation, visit:
 - Solr: <http://lucene.apache.org/solr/guide/>
 
 ## Building Lucene/Solr
-
+#
 (You do not need to do this if you downloaded a pre-built package)
 
 Lucene and Solr are built using [Apache Ant](http://ant.apache.org/).  To build
