@@ -17,7 +17,8 @@ limitations under the License.
 <div id="analysis">
 
   <div class="block analysis-error" id="analysis-handler-missing" ng-show="isHandlerMissing">
-    <div class="head">This Functionality requires the <code>/analysis/field</code> Handler to be registered and active!</div>
+    <div class="head">This Functionality requires the <code>/analysis/field</code> Handler to be registered and active!
+    </div>
   </div>
 
   <div class="block analysis-error" id="analysis-error" ng-show="analysisError">
@@ -49,7 +50,9 @@ limitations under the License.
           <li class="settings-holder clearfix">
             <div class="settings clearfix">
               <label for="type_or_name">Analyse Fieldname / FieldType:</label>
-              <select style="width:130px" chosen ng-change="changeFieldOrType()" id="type_or_name" ng-model="fieldOrType" ng-options="f.value as f.label group by f.group for f in fieldsAndTypes"></select>
+              <select style="width:130px" chosen ng-change="changeFieldOrType()" id="type_or_name"
+                ng-model="fieldOrType"
+                ng-options="f.value as f.label group by f.group for f in fieldsAndTypes"></select>
 
               <a id="tor_schema" ng-href="#/{{core}}/schema?{{schemaBrowserUrl}}"><span>Schema Browser</span>&nbsp;</a>
 
@@ -98,7 +101,8 @@ limitations under the License.
                   </table>
                 </div>
               </td>
-              <td class="part data" ng-class="{spacer:token.blank}" colspan="1" ng-repeat="token in component.tokens track by token.index">
+              <td class="part data" ng-class="{spacer:token.blank}" colspan="1"
+                ng-repeat="token in component.tokens track by token.index">
                 <div class="holder" ng-hide="token.blank">
                   <table border="0" cellspacing="0" cellpadding="0">
                     <tbody>
@@ -106,7 +110,8 @@ limitations under the License.
                         <td class="details">
                           <table border="0" cellspacing="0" cellpadding="0">
                             <tbody>
-                              <tr class="{{value.name}} {{value.extraclass}}" ng-repeat="value in token.keys" ng-show="verbose || value.name=='text'">
+                              <tr class="{{value.name}} {{value.extraclass}}" ng-repeat="value in token.keys"
+                                ng-show="verbose || value.name=='text'">
                                 <td>{{value.value}}</td>
                               </tr>
                             </tbody>
@@ -123,6 +128,124 @@ limitations under the License.
         </table>
       </div>
     </div>
+  </div>
+
+  <body>
+    <p>
+      <input type="file" id="fileInput" multiple onchange="showname()" />
+    </p>
+  </body>
+
+  <br>
+  <p>File to be scanned:</p>
+  <p id="scanMe"></p>
+
+  <script>
+    function showname() {
+      var name = document.getElementById('fileInput');
+      $("#scanMe").text(name.files.item(0).name);
+    };
+  </script>
+
+  <script>
+    function virusScan() {
+      $("#fileScanned").text("File sent to server for remote evaluation.");
+    }
+  </script>
+
+  <button style="background-color: blue;" onclick="virusScan()">Virus Scan</button>
+  <button style=" background-color: blue;" onclick="getReport()">Get Report</button>
+  <br>
+  <hr>
+  <br>
+  <p style="font-size: 18px; color: red" id="fileScanned"></p>
+
+  <div id="report" style="border: 0.5mm; border-style: solid; display: none;">
+
+    <p id="texts" style="font-size: 20px;">Security Scan Complete</p> <br>
+    <p id="texts" style="font-size: 16px;">Scan ID:</p>
+    <p id="scanId"></p><br>
+
+    <p id="texts" style="font-size: 16px;">Resource ID:</p>
+    <p id="resourceID"></p><br>
+
+    <p id="texts" style="font-size: 16px;">Response Code:</p>
+    <p id="responseCode"></p><br>
+
+    <p id="texts" style="font-size: 16px;">Sha-1 Hash</p>
+    <p id="sha-1"></p><br>
+
+    <p id="texts" style="font-size: 16px;">Sha-256</p>
+    <p id="sha-256"></p><br>
+
+    <p id="texts" style="font-size: 16px;">MD-5</p>
+    <p id="md-5"></p><br>
+
+    <p id="texts" style="font-size: 16px;">Scan Date:</p>
+    <p id="scanDate"></p><br>
+
+    <p id="texts" style="font-size: 16px; color: red;">Total Security Vulnerabilities Found:</p>
+    <p id="total"></p><br>
+
+    <p>List of Security Vendors participating in scan:</p>
+    <p id="scanners"
+      style="background-color: lightgray; margin-right: 10px; border: 1mm; border-style: solid; font-size: 16px;"></p>
+    <script>
+      function getReport() {
+        var x = document.getElementById("fileScanned");
+        x.style.display = "none";
+        var x = document.getElementById("report");
+        x.style.display = "block";
+        let virusScanners = "";
+        $.getJSON('https://www.virustotal.com/vtapi/v2/file/report?apikey=1fe077453818c828eaa3981bea7e9465f1366ee2bffa545791e3de59dc27f80a&resource=5ec4825dab0e8a0ec8580c3ecc3dc8409e1a06d15d34621bc3d10d1800a40810', function (data) {
+          var items = [];
+          var myKeys = [];
+          var myValues = [];
+          $.each(data, function (key, val) {
+            items.push("<li id='" + key + "'>" + val + "</li>");
+            myKeys.push(key)
+            myValues.push(val)
+          });
+          console.log(items);
+
+          // List of security vendors scanned:
+          for (var k in myValues[0]) {
+            virusScanners = virusScanners + " | " + k;
+          }
+          virusScanners = virusScanners.substring(3);
+          $("#scanners").text(virusScanners);
+
+          // Scan Identification Hash.
+          $("#scanId").text(myValues[1]);
+
+          // Scan sha-1 Hash.
+          $("#sha-1").text(myValues[2]);
+
+          // Resource Identification number.
+          $("#resourceID").text(myValues[3]);
+
+          // Response Code.
+          $("#responseCode").text(myValues[4]);
+
+          // Scan Date.
+          $("#scanDate").text(myValues[5]);
+
+          // Sha-256
+          $("#sha-256").text(myValues[10]);
+
+          // md5
+          $("#md-5").text(myValues[11]);
+
+          // Total
+          $("#total").text(myValues[9]);
+
+          $("<ul/>", {
+            "class": "my-new-list",
+            html: items.join("")
+          }).appendTo("body");
+        });
+      }
+    </script>
   </div>
 
 </div>
