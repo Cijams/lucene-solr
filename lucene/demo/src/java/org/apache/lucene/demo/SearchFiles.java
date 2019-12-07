@@ -87,7 +87,7 @@ public class SearchFiles {
       }
     }
     
-    IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)));
+    IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(index)), index);
     IndexSearcher searcher = new IndexSearcher(reader);
     Analyzer analyzer = new StandardAnalyzer();
 
@@ -115,6 +115,7 @@ public class SearchFiles {
       }
       
       Query query = parser.parse(line);
+      System.out.println("Query line: " + query.getQueryStrings());
       System.out.println("Searching for: " + query.toString(field));
             
       if (repeat > 0) {                           // repeat & time as benchmark
@@ -135,6 +136,14 @@ public class SearchFiles {
     reader.close();
   }
 
+  public static void calculateDifference(Date start, Date end) {
+    if(start != null && end != null) {
+      long difference = end.getTime() - start.getTime();
+      
+      System.out.println("Calculated time difference: " + difference + "ms");
+    }
+  }
+  
   /**
    * This demonstrates a typical paging search scenario, where the search engine presents 
    * pages of size n to the user. The user can then go to the next page if interested in
@@ -149,7 +158,12 @@ public class SearchFiles {
                                      int hitsPerPage, boolean raw, boolean interactive) throws IOException {
  
     // Collect enough docs to show 5 pages
+    Date startTime = new Date();
     TopDocs results = searcher.search(query, 5 * hitsPerPage);
+    Date endTime = new Date();
+    
+    calculateDifference(startTime, endTime);
+    
     ScoreDoc[] hits = results.scoreDocs;
     
     int numTotalHits = Math.toIntExact(results.totalHits.value);

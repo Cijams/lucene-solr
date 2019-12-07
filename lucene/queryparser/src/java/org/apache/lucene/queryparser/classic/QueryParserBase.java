@@ -107,6 +107,10 @@ public abstract class QueryParserBase extends QueryBuilder implements CommonQuer
     try {
       // TopLevelQuery is a Query followed by the end-of-input (EOF)
       Query res = TopLevelQuery(field);
+      
+      if(res != null) {
+        res.setQueryString(query);
+      }
       return res!=null ? res : newBooleanQuery().build();
     }
     catch (ParseException | TokenMgrError tme) {

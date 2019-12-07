@@ -16,7 +16,6 @@
  */
 package org.apache.lucene.index;
 
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Collections;
@@ -81,6 +80,7 @@ public abstract class IndexReader implements Closeable {
   private boolean closed = false;
   private boolean closedByChild = false;
   private final AtomicInteger refCount = new AtomicInteger(1);
+  private static String _indexPath;
 
   IndexReader() {
     if (!(this instanceof CompositeReader || this instanceof LeafReader))
@@ -301,9 +301,7 @@ public abstract class IndexReader implements Closeable {
     return vectors.terms(field);
   }
 
-  /** Returns the number of documents in this index.
-   *  <p><b>NOTE</b>: This operation may run in O(maxDoc). Implementations that
-   *  can't return this number in constant-time should cache it. */
+  /** Returns the number of documents in this index. */
   public abstract int numDocs();
 
   /** Returns one greater than the largest possible document number.
@@ -312,8 +310,7 @@ public abstract class IndexReader implements Closeable {
    */
   public abstract int maxDoc();
 
-  /** Returns the number of deleted documents.
-   *  <p><b>NOTE</b>: This operation may run in O(maxDoc). */
+  /** Returns the number of deleted documents. */
   public final int numDeletedDocs() {
     return maxDoc() - numDocs();
   }
@@ -475,4 +472,13 @@ public abstract class IndexReader implements Closeable {
    */
   public abstract long getSumTotalTermFreq(String field) throws IOException;
 
+
+  public String getIndexPath() {
+    return _indexPath;
+  }
+  
+  public void setIndexPath(String indexPath) {
+    _indexPath = indexPath;
+  }
+  
 }

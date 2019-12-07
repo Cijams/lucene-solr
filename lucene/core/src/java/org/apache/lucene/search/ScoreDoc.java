@@ -16,10 +16,16 @@
  */
 package org.apache.lucene.search;
 
+import java.io.Serializable;
 
 /** Holds one hit in {@link TopDocs}. */
 
-public class ScoreDoc {
+public class ScoreDoc implements Serializable {
+
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 2007571593031859005L;
 
   /** The score of this document for the query. */
   public float score;

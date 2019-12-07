@@ -47,6 +47,7 @@ public abstract class Query {
    * default field and omitted.
    */
   public abstract String toString(String field);
+  private String _queryString = null; 
 
   /** Prints a query to a string. */
   @Override
@@ -125,5 +126,13 @@ public abstract class Query {
    */
   protected final int classHash() {
     return CLASS_NAME_HASH;
+  }
+  
+  public String getQueryStrings() {
+    return _queryString;
+  }
+  
+  public void setQueryString(String queryString) {
+    _queryString = queryString;
   }
 }

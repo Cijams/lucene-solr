@@ -54,14 +54,18 @@ public abstract class DirectoryReader extends BaseCompositeReader<LeafReader> {
 
   /** The index directory. */
   protected final Directory directory;
-  
+
   /** Returns a IndexReader reading the index in the given
    *  Directory
    * @param directory the index directory
    * @throws IOException if there is a low-level IO error
    */
   public static DirectoryReader open(final Directory directory) throws IOException {
-    return open(directory, Collections.emptyMap());
+    return open(directory, Collections.emptyMap(), "");
+  }
+  
+  public static DirectoryReader open(final Directory directory, String index) throws IOException {
+    return open(directory, Collections.emptyMap(), index);
   }
 
   /** Returns a IndexReader reading the index in the given
@@ -73,7 +77,11 @@ public abstract class DirectoryReader extends BaseCompositeReader<LeafReader> {
    * @throws IOException if there is a low-level IO error
    */
   public static DirectoryReader open(final Directory directory, final Map<String, String> readerAttributes) throws IOException {
-    return StandardDirectoryReader.open(directory, null, readerAttributes);
+    return StandardDirectoryReader.open(directory, null, readerAttributes, "");
+  }
+  
+  public static DirectoryReader open(final Directory directory, final Map<String, String> readerAttributes, String index) throws IOException {
+    return StandardDirectoryReader.open(directory, null, readerAttributes, index);
   }
   
   /**
@@ -134,7 +142,7 @@ public abstract class DirectoryReader extends BaseCompositeReader<LeafReader> {
    * @throws IOException if there is a low-level IO error
    */
   public static DirectoryReader open(final IndexCommit commit, Map<String, String> readerAttributes) throws IOException {
-    return StandardDirectoryReader.open(commit.getDirectory(), commit, readerAttributes);
+    return StandardDirectoryReader.open(commit.getDirectory(), commit, readerAttributes, "");
   }
 
   /**
@@ -444,5 +452,5 @@ public abstract class DirectoryReader extends BaseCompositeReader<LeafReader> {
    * @lucene.experimental
    */
   public abstract IndexCommit getIndexCommit() throws IOException;
-
+  
 }

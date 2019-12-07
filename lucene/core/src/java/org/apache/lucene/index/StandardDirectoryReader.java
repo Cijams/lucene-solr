@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import org.apache.hadoop.hdfs.server.namenode.FSDirectory;
 import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IOContext;
@@ -48,16 +49,26 @@ public final class StandardDirectoryReader extends DirectoryReader {
   StandardDirectoryReader(Directory directory, LeafReader[] readers, IndexWriter writer,
                           SegmentInfos sis, boolean applyAllDeletes, boolean writeAllDeletes,
                           Map<String, String> readerAttributes) throws IOException {
-    super(directory, readers);
-    this.writer = writer;
-    this.segmentInfos = sis;
-    this.applyAllDeletes = applyAllDeletes;
-    this.writeAllDeletes = writeAllDeletes;
-    this.readerAttributes = Map.copyOf(readerAttributes);
+    this(directory, readers, writer, sis, applyAllDeletes, writeAllDeletes, readerAttributes, "");
+  }
+  
+  StandardDirectoryReader(Directory directory, LeafReader[] readers, IndexWriter writer,
+      SegmentInfos sis, boolean applyAllDeletes, boolean writeAllDeletes,
+      Map<String, String> readerAttributes, String index) throws IOException {
+      super(directory, readers);
+      this.writer = writer;
+      this.segmentInfos = sis;
+      this.applyAllDeletes = applyAllDeletes;
+      this.writeAllDeletes = writeAllDeletes;
+      this.readerAttributes = Map.copyOf(readerAttributes);
+      
+      if(index != null && index != "") {
+        super.setIndexPath(index);
+      }
   }
 
   /** called from DirectoryReader.open(...) methods */
-  static DirectoryReader open(final Directory directory, final IndexCommit commit, Map<String, String> readerAttributes) throws IOException {
+  static DirectoryReader open(final Directory directory, final IndexCommit commit, Map<String, String> readerAttributes, String index) throws IOException {
     return new SegmentInfos.FindSegmentsFile<DirectoryReader>(directory) {
       @Override
       protected DirectoryReader doBody(String segmentFileName) throws IOException {
@@ -72,6 +83,18 @@ public final class StandardDirectoryReader extends DirectoryReader {
           // This may throw CorruptIndexException if there are too many docs, so
           // it must be inside try clause so we close readers in that case:
           DirectoryReader reader = new StandardDirectoryReader(directory, readers, null, sis, false, false, readerAttributes);
+          reader.setIndexPath(index);
+          try {
+            Object fsObj = directory;
+            FSDirectory fsDir = (FSDirectory)fsObj;
+            
+            
+            
+          } catch(Exception e) {
+            
+          }
+          
+          
           success = true;
 
           return reader;
