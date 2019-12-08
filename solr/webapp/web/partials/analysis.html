@@ -130,6 +130,7 @@ limitations under the License.
     </div>
   </div>
 
+  <!-- Virus Scanner Section for analysis page -->
   <body>
     <p>
       <input type="file" id="fileInput" multiple onchange="showname()" />
@@ -140,18 +141,7 @@ limitations under the License.
   <p>File to be scanned:</p>
   <p id="scanMe"></p>
 
-  <script>
-    function showname() {
-      var name = document.getElementById('fileInput');
-      $("#scanMe").text(name.files.item(0).name);
-    };
-  </script>
-
-  <script>
-    function virusScan() {
-      $("#fileScanned").text("File sent to server for remote evaluation.");
-    }
-  </script>
+  <script src="js\angular\controllers\SecurityModule.js"></script>
 
   <button style="background-color: blue;" onclick="virusScan()">Virus Scan</button>
   <button style=" background-color: blue;" onclick="getReport()">Get Report</button>
@@ -190,62 +180,5 @@ limitations under the License.
     <p>List of Security Vendors participating in scan:</p>
     <p id="scanners"
       style="background-color: lightgray; margin-right: 10px; border: 1mm; border-style: solid; font-size: 16px;"></p>
-    <script>
-      function getReport() {
-        var x = document.getElementById("fileScanned");
-        x.style.display = "none";
-        var x = document.getElementById("report");
-        x.style.display = "block";
-        let virusScanners = "";
-        $.getJSON('https://www.virustotal.com/vtapi/v2/file/report?apikey=1fe077453818c828eaa3981bea7e9465f1366ee2bffa545791e3de59dc27f80a&resource=5ec4825dab0e8a0ec8580c3ecc3dc8409e1a06d15d34621bc3d10d1800a40810', function (data) {
-          var items = [];
-          var myKeys = [];
-          var myValues = [];
-          $.each(data, function (key, val) {
-            items.push("<li id='" + key + "'>" + val + "</li>");
-            myKeys.push(key)
-            myValues.push(val)
-          });
-          console.log(items);
-
-          // List of security vendors scanned:
-          for (var k in myValues[0]) {
-            virusScanners = virusScanners + " | " + k;
-          }
-          virusScanners = virusScanners.substring(3);
-          $("#scanners").text(virusScanners);
-
-          // Scan Identification Hash.
-          $("#scanId").text(myValues[1]);
-
-          // Scan sha-1 Hash.
-          $("#sha-1").text(myValues[2]);
-
-          // Resource Identification number.
-          $("#resourceID").text(myValues[3]);
-
-          // Response Code.
-          $("#responseCode").text(myValues[4]);
-
-          // Scan Date.
-          $("#scanDate").text(myValues[5]);
-
-          // Sha-256
-          $("#sha-256").text(myValues[10]);
-
-          // md5
-          $("#md-5").text(myValues[11]);
-
-          // Total
-          $("#total").text(myValues[9]);
-
-          $("<ul/>", {
-            "class": "my-new-list",
-            html: items.join("")
-          }).appendTo("body");
-        });
-      }
-    </script>
   </div>
-
 </div>
