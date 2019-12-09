@@ -16,9 +16,14 @@
  */
 package org.apache.solr.update;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.invoke.MethodHandles;
 import java.util.Vector;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.solr.core.DirectoryFactory;
 import org.apache.solr.core.HdfsDirectoryFactory;
@@ -32,6 +37,9 @@ import org.apache.solr.schema.SchemaField;
 import org.apache.solr.util.plugin.SolrCoreAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /**
  * <code>UpdateHandler</code> handles requests to change the index
@@ -111,7 +119,7 @@ public abstract class UpdateHandler implements SolrInfoBean {
     this(core, null);
   }
   
-  public UpdateHandler(SolrCore core, UpdateLog updateLog)  {
+  public UpdateHandler(SolrCore core, UpdateLog updateLog) throws SAXException, IOException, UnsupportedEncodingException, ParserConfigurationException  {
     this.core=core;
     idField = core.getLatestSchema().getUniqueKeyField();
     idFieldType = idField!=null ? idField.getType() : null;
@@ -128,6 +136,7 @@ public abstract class UpdateHandler implements SolrInfoBean {
         String className = ulogPluginInfo.className == null ? UpdateLog.class.getName() : ulogPluginInfo.className;
         ulog = core.getResourceLoader().newInstance(className, UpdateLog.class);
       }
+      ParseXML();
 
       if (!core.isReloaded() && !dirFactory.isPersistent()) {
         ulog.clearLog(core, ulogPluginInfo);
@@ -208,4 +217,19 @@ public abstract class UpdateHandler implements SolrInfoBean {
   public SolrMetricsContext getSolrMetricsContext() {
     return solrMetricsContext;
   }
+  
+   public static void ParseXML() throws UnsupportedEncodingException, SAXException, IOException, ParserConfigurationException
+    {
+
+        DocumentBuilderFactory factory =
+        DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        
+        StringBuilder xmlStringBuilder = new StringBuilder();
+        xmlStringBuilder.append("<?xml version=1.0?> <class> </class>");
+        ByteArrayInputStream input = new ByteArrayInputStream(xmlStringBuilder.toString().getBytes("UTF-8"));
+        Document doc = builder.parse(input);
+        
+        Element root = doc.getDocumentElement();
+    }
 }
