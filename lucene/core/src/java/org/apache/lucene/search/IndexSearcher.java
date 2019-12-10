@@ -500,7 +500,7 @@ public class IndexSearcher {
     
     if(docs == null) {
       docs = search(query, manager);  
-      if(docs != null && !cacher.cacheFileExists()) {
+      if(docs != null) {
         cacher.CreateCacheFile(docs);
       }
     }
