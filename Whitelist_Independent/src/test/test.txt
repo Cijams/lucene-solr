@@ -1,0 +1,14 @@
+memory.txt
+gb18030-example.xml
+books.csv
+randomEntries.cool.bak
+doAConfiguration.cfg
+assignVariables.doc
+books.json
+more_books.jsonl
+solr-word.pdf
+ooiujeik.html
+test_utf8.sh
+update-script.js
+macros.vm
+germany_640.png
